@@ -1,0 +1,888 @@
+/* ---------------------------------------
+	CWS YTP 
+--------------------------------------- */
+
+/*----------------------------------------
+[Table of contents]
+
+1. Simple Reset
+2. Channel Header
+3. Dynamic Video Stuff
+4. Videos Controls
+5. Videos Player Container
+6. Video Item
+7. Video Meta
+8. Media Queries
+--------------------------------------- */
+
+/* https://coolestguidesontheplanet.com/videodrome/youtube/ */
+/* https://luisten.com/blog/ultimate-guide-embedding-responsive-youtube-videos/ */
+
+
+/* ---------------------------------------
+    Simple Reset
+--------------------------------------- */
+
+    html, body {
+        padding:0;
+        margin:0;
+    }
+
+
+    .entry-content .cws-ytp  a {
+       border-bottom: 0 solid white ;
+
+       box-shadow: none;
+    }
+
+    .entry-content .cws-ytp  a:hover {
+       border-bottom: 0 solid black ;
+
+       box-shadow: none;
+    }
+
+/* ---------------------------------------
+    Channel Header
+--------------------------------------- */
+    .cws-ytp #cws-ytp-header {
+        padding: 0px ;
+        background-color: none;
+    }
+
+    .cws-ytp #cws-ytp-logo {
+        display: block;
+        width: 100px;
+        height: 100px;
+        border-color: #fff;
+        border-width: 5px;
+        border-style: solid;
+        border-radius: 100px;
+        margin-top: 20px;
+    }
+
+    .cws-ytp #cws-ytp-logo img {
+        display: inline-block;
+        width: 100%;
+        height: auto;
+        border-radius: 100px;
+    }
+
+    .cws-ytp .cws-ytp-button-container {
+        position: relative;
+        z-index:999;
+        height: 45px;
+    }
+
+    .cws-ytp #cws-ytp-video-stop-button{
+        /*display: block;
+        width: 50px; 
+        height: 50px;         
+        position: absolute;
+        right: -75px;
+        top: 0px;
+        margin: 0;
+        border-radius: 50px;
+        font-size: 26px;
+        line-height: 46px;
+        text-align: center;
+        border: 2px solid #000;
+        color: #000;
+        text-decoration: none;
+        z-index: 90;
+        */
+        display: block;
+        width: 50px; 
+        height: 50px;         
+        position: absolute;
+        right: 0;
+        top: -60px;
+        margin: 0;
+        border-radius: 50px;
+        font-size: 26px;
+        line-height: 45px;
+        text-align: center;
+        border: 4px solid #000;
+        color: #000;
+        text-decoration: none;
+        z-index: 90;  
+
+        display: none;         
+    }
+
+    /* Without these FA Icons were not rendering correctly - go figure */
+ /*   .fas, .fab, .far, .fal{ font-family: 'FontAwesome' !important; }
+    .fas, .fab, .fas, .far,.fal {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+   */ 
+/*    .social-container{
+        float: right;
+    }*/
+
+    .cws-ytp .cws-ytp-social-container{
+        display: block;
+    }
+
+    .cws-ytp #cws-ytp-subscribe-link, 
+    .cws-ytp #cws-ytp-social-links {
+        float: right;
+    }
+    /* #subscribe-link, #social-links a { */
+    .cws-ytp #cws-ytp-subscribe-link, 
+    .cws-ytp #cws-ytp-social-links {        
+        display: inline-block;
+        /* padding-left: 10px; */
+        font-size: 22px;
+    }
+
+    .cws-ytp #cws-ytp-subscribe-link a, 
+    .cws-ytp #cws-ytp-social-links a {        
+        padding-left: 5px;
+        font-size: 18px;
+    }
+
+
+/* ---------------------------------------
+    Dynamic Video Stuff
+--------------------------------------- */
+
+    /* element to display YouTube video thumbnail image as background, can be controlled by youtube.config.showBackgroundImage[true|false] */
+    .cws-ytp #cws-ytp-background-image {
+        width: 100%;
+        height: 100%;
+        margin: 0 auto;
+        background-image: url();
+        background-position: center center;
+        position: relative;
+        /* display: table; */
+        top: 0;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: 100%;
+        z-index: 0;
+
+        background-repeat: no-repeat;
+    }
+
+    /* apply color overlay above bg image */
+    /* https://stackoverflow.com/questions/17134929/overlay-a-background-image-with-an-rgba-background-color */
+    .cws-ytp #cws-ytp-background-image:before {
+        content: ' ';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        /* Could use the background color overlay when a video is playing to dull the background a little */
+        /* background-color: rgba(0,0,0,.5); */
+        z-index: -1;
+    }
+    
+    .cws-ytp #cws-ytp-video-placeholder {
+        display: none;
+    }
+
+    /* this is the element targeted by JS to inject videos, can be altered in youtube.config if required */
+    #cws_ytp {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        z-index: 5;
+        padding-top: 2%;
+        clear: both;
+    }
+
+
+    .cws-ytp #cws-ytp-video-title h2{
+        font-size: 1.4rem ;
+        line-height: 1.4;
+    }
+
+
+
+.cws-ytp #cws-ytp-video-meta {
+    padding-left: 10px;
+}
+
+.cws-ytp #cws-ytp-video-meta span {
+    padding-left: 10px;
+}
+
+/* ---------------------------------------
+    Videos Controls
+--------------------------------------- */
+    .cws-ytp #cws-ytp-video-controls {
+        width: 100%;
+        position: relative;
+        margin: 0 auto;
+        padding-bottom: 56.25%;
+    }
+
+    .cws-ytp .cws-ytp-next-previous-video {
+        position: absolute;
+        top: 50% ;
+        width: 50px;
+        height: 50px;
+        font-size: 50px;
+        line-height: 55px;
+        margin: -25px 0 0;
+        text-align: center;
+        text-indent: 0;
+        z-index: 10;
+        transition: all 0.4s ease 0s;    
+    }
+
+    .cws-ytp #cws-ytp-video-prev-button {
+        color: #fff;
+        left: 0;
+    }
+
+    .cws-ytp #cws-ytp-video-next-button {
+        color: #fff;
+        right: 0;
+    }
+
+    .cws-ytp #cws-ytp-video-next-button:hover {
+        text-indent: 15px;
+    }
+
+    .cws-ytp #cws-ytp-video-prev-button:hover {
+        text-indent: -15px;
+    }
+
+    .cws-ytp #cws-ytp-video-play-button {
+        color: #ffffff;
+        width: 75px;
+        height: 75px;
+        background: rgba( 20, 20, 20, 0.25 );
+        border-radius: 75px;
+        border-style: solid;
+        border-width: 5px;
+        display: block;
+        font-size: 26px;
+        line-height: 67px;
+        margin: -40px 0 0 -40px;
+        position: absolute;
+        text-align: center;
+        text-indent: 4px;
+        top: 50%;
+        left: 50%;
+        z-index: 10;
+        transition: all 0.4s ease 0s; 
+    }
+
+    .cws-ytp #cws-ytp-video-play-button:hover {
+        background-color: #ffffff;
+        color: #0F0F0F;
+    }
+
+
+/* ---------------------------------------
+    Videos Player Container
+--------------------------------------- */
+
+    .cws-ytp #cws-ytp-video-container-wrapper {
+        padding: 0;
+    }
+
+    .cws-ytp #cws-ytp-video-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        padding-top: 0;
+        height: 0;
+    }
+
+    .cws-ytp #cws-ytp-video-container  iframe, 
+    .cws-ytp #cws-ytp-video-container object, 
+    .cws-ytp #cws-ytp-video-container embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .cws-ytp #cws-ytp-video-description-wrapper {
+        text-align: center;
+    }
+
+    .cws-ytp #cws-ytp-video-description-wrapper h3 {
+        color: red;
+    }
+
+    .cws-ytp #cws-ytp-video-description, .cws-ytp #cws-ytp-channel-description{
+        width: 660px;
+        height: 0;
+        position: relative;
+        float: none;
+        overflow: hidden;
+        font-size: 20px;
+        max-width: 100%;
+        margin: 5px auto;
+        text-align: center;
+        line-height: 30px;
+        white-space: pre-line;
+    }
+
+
+    .cws-ytp #cws-ytp-video-description-controls a:hover {
+        top: 6px;
+    }
+
+    .cws-ytp #cws-ytp-video-description-controls a {
+        position: relative;
+        color: inherit;
+        top: 0;
+        transition: all .5s ease 0s;        
+    }
+
+
+
+    .cws-ytp #cws-ytp-pagination {
+        height: 50px;        
+        float: left;
+        font-size: 30px;
+    }
+
+    #view-layout {
+        float: right;
+        font-size: 30px;
+    }
+
+
+/* ---------------------------------------
+    Video Item
+--------------------------------------- */
+
+    .cws-ytp .cws-ytp-button-container {
+        padding: 0 2% ;
+    }
+
+    /* wrapper element around video items */
+    .cws-ytp .cws-ytp-video-item-container {
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+        opacity: 1;
+        /* transition: opacity 0.3s ease 0s;     */
+        /* padding: 0 8%; */
+        padding: 0;
+        z-index: 4;
+    }
+
+    /* video items */
+    .cws-ytp .cws-ytp-video-item { 
+        display: inline-block;
+        margin: 0 1% 5%;
+        width: 100%;
+        vertical-align: top;
+        position: relative;
+        overflow: hidden;
+    }
+
+
+    /* link to play video - background-image set dynamically via JS*/
+    .cws-ytp .cws-ytp-video-image-link { 
+        padding-bottom: 55%;
+        position: relative;
+        max-width: 100%;
+        box-shadow: 0 5px 12px rgba( 0, 0, 0, 0.35 );
+        background-size: 100%;
+        /* outline: pink solid 4px; */
+        transition: background-size .2s ease 0s;
+        display: block;
+        z-index: 1000;
+        cursor: pointer;
+        background-position: center;
+
+        height:100%;
+    }
+
+    /* apply color overlay above bg image */
+    .cws-ytp .cws-ytp-video-item:hover:after {
+        content: ' ';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        /* background-color: rgba(0,0,0,.5); */
+    }
+
+    .cws-ytp .cws-ytp-video-item:not(.playing):hover .video-image-link {
+        outline-color: #000000;
+        outline-width: 3px;
+        background-size: 120%;
+    }
+
+/* start - sort this shit out */
+    .cws-ytp .playing .cws-ytp-video-image-link:before { 
+        content: 'PLAYING';
+        position: absolute;
+        opacity: 1;
+        color: #ffffff;
+        font-size: 16px;
+        letter-spacing: 15px;
+        line-height: 20px;
+        text-align: center;      
+    }
+
+    .cws-ytp .cws-ytp-video-image-link:before {
+        content: '';
+        display: block;
+        height: 20px;
+        left: 0;
+        margin: -10px 0 0;
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        z-index: 2;
+    }
+
+    .cws-ytp .playing .cws-ytp-video-image-link:after {
+        content: '';
+        display: block;
+        position: absolute;
+        transition: background 0.3s ease 0s;
+
+        width: 100%;
+        height: auto;
+        bottom: 0;
+        left: 0;
+        top: 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+        background-color: rgba(0,0,0,0.8);
+        z-index: 1;
+    }
+/* END - sort this shit out */
+
+
+
+/* List View */
+/*
+    .listView .video-item {
+        display: block;  
+        margin: 0 1% 5%;
+        width: 96%;
+        vertical-align: top;
+        position: relative;
+        overflow: hidden;  
+    }
+
+    .listView .video-image-link {
+        width: 30%;
+        height: auto;
+        display: block !important;
+        position: relative;
+        top: 0;
+        left: 0;
+        background-position: center;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        padding: 0 0 17.3%;
+        z-index: 1000;        
+    }
+
+    .listView .video-details {
+        width: 98%;
+        display: inline-block;
+        float: right;
+        vertical-align: top;    
+        padding: 0;
+        padding-left: 33%;
+        z-index: 999;
+    }
+
+    .listView .video-details h3 {
+        font-size: 20px;
+        line-height: 1.4em;
+        margin: 12px 0 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;    
+        margin-left: 0;
+        padding: 0;
+        letter-spacing: 3px;
+        text-transform: uppercase;    
+    }
+*/
+
+/* 24 oct MOBILE FIRST! */
+
+.cws-ytp .cws-ytp-listview .cws-ytp-video-image-link,
+.cws-ytp .cws-ytp-listview .cws-ytp-video-details {
+    display: block;
+    height: auto;
+    position: relative;
+}
+
+.cws-ytp .cws-ytp-listview .cws-ytp-video-details h3 {
+    padding: 0 5px;
+    font-weight: bold;
+}
+
+.cws-ytp .cws-ytp-listview .cws-ytp-video-details .cws-ytp-video-meta {
+    text-align: right;
+    font-size: small;
+}
+
+
+    .cws-ytp .cws-ytp-listview /* .cws-ytp */ .cws-ytp-video-desc {
+        display: block;
+        height:40px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+/*  */
+
+
+
+
+
+/* ---------------------------------------
+    Video Meta
+--------------------------------------- */
+    /* http://jsfiddle.net/wqRcK/20/ */
+
+    .overflow-text {
+        position: relative;
+        z-index: 300;
+        left: 0;
+        bottom: 0;
+        width: 90%;
+    }
+
+    .cws-ytp .gridView .cws-ytp-video-meta, 
+    .cws-ytp .gridView .cws-ytp-video-desc {
+        display: none;
+    }
+
+/* 24Oct moved to media query
+/*
+    .listView .video-meta {
+        margin-bottom: 10px;
+    }
+
+    .listView .video-desc {
+        display: block;
+        height:40px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+*/
+    .cws-ytp .cws-ytp-duration {
+        color: #f7f7f7;
+        border-radius: 2px;
+        font-size: 16px;
+        font-weight: normal;
+        letter-spacing: 4px;
+        opacity: 0;
+        padding: 5px;
+        position: absolute;
+        top: 5%;
+        right: 5%;
+        text-indent: 2px;
+        
+        transition: all 0.3s ease 0s;
+        
+        background-color: rgba( 0,0,0,0.90 );
+        z-index: 100;
+    }
+
+   .cws-ytp .cws-ytp-video-details {
+        display: block;
+        left: 0;
+        padding: 20px 0 0;
+        position: absolute;
+        padding: 0;
+        width: 100%;
+        /* z-index: 1999; */ /* removing this made the play button clickable */
+        opacity: 1;
+        top: 0px;
+        /* transition: all 0.3s ease 0s; */
+        /*    
+        background: -webkit-linear-gradient(top, rgba(15,15,15,.0) 0, rgba(15,15,15,.5) 100%);
+        background: -moz-linear-gradient(top, rgba(15,15,15,.0) 0, rgba(15,15,15,.5) 100%);
+        background: linear-gradient(to bottom, rgba(15,15,15,.0) 0, rgba(15,15,15,.5) 100%);
+        */
+    }
+
+    /* This rule fucks up the ability to click on video item thumbnail and have it cue/play in player!!!!!!!! WTF
+    /* without this rule the title won't show on hover HHHHMMMMM */
+    /* Works if click on title but not play button or img */
+    /* is it a z-index issue ???? */
+   
+    .cws-ytp .cws-ytp-video-item:hover .cws-ytp-video-details {
+        opacity: 1;
+        bottom: 0;
+    }
+
+   .cws-ytp .cws-ytp-video-title-link {   
+        width: 100%;
+        color: #f2f2f2; 
+        font-size: 16px;
+        font-weight: normal;
+        letter-spacing: 3px;
+        position: absolute;
+        left: 0;
+        text-indent: 2px;
+        bottom: 0%;
+        transition: all 0.3s ease 0s;
+        
+        padding: 0;
+        text-align: left;
+        /* text-shadow: 1px 1px 2px #4d4d4d; */
+        
+        z-index: 1000;
+    }
+
+    .cws-ytp .cws-ytp-listview .cws-ytp-video-title-link {
+        color: #4d4d4d;
+        position: relative;
+        text-align: left;
+    }
+
+    .cws-ytp .cws-ytp-video-details h3 {
+        font-size: 18px;
+        font-weight: 100; 
+        letter-spacing: 1px;
+        margin-bottom: 0;
+        padding: 5%;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    /* http://jsfiddle.net/N2U6B/555/ */
+    .cws-ytp .cws-ytp-video-title-link::before {
+        content: ' ';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        xbackground-color: rgba(0,0,0,.5);
+        z-index: -1;
+        xbackground-color: rgba(15,15,15,.3);
+
+        xpadding-bottom: -56%; 
+
+        background: -webkit-linear-gradient(top, rgba(15,15,15,0.0) 10%, rgba(15,15,15,1) 80%);
+        background: -moz-linear-gradient(top, rgba(15,15,15,0.0) 10%, rgba(15,15,15,1) 80%);
+        background: linear-gradient(to bottom, rgba(15,15,15,0.0) 10%, rgba(15,15,15,1) 80%);
+    }
+
+    .cws-ytp .cws-ytp-video-title-link::after {
+        content: ' ';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        /* padding-bottom: -56%; */
+        background-color: rgba(0,0,0,.5);
+        z-index: 2;
+        background: -webkit-linear-gradient(top, rgba(15,15,15,0.0) 50%, rgba(15,15,15,1) 100%);
+        background: -moz-linear-gradient(top, rgba(15,15,15,0.0) 50%, rgba(15,15,15,1) 100%);
+        background: linear-gradient(to bottom, rgba(15,15,15,0.0) 50%, rgba(15,15,15,1) 100%);
+    }
+
+    .cws-ytp .cws-ytp-video-item:not(.playing):hover .cws-ytp-duration {
+        top: 8%;
+        opacity: 0.75;
+    }
+
+    .cws-ytp .cws-ytp-play-button {
+        width: 60px;
+        height: 60px;
+        display: block;
+        font-size: 20px;
+        left: 50%;
+        line-height: 60px;
+        position: absolute;
+        text-align: center;
+        text-indent: 2px;
+        top: 50%;
+        transition: all 0.3s ease 0s;
+        cursor: pointer;
+        border-radius: 60px;
+        border-width: 3px;
+        border-style: solid;
+        margin: -33px 0 0 -33px;
+        opacity: 0;
+        box-shadow: none;
+        transform: scale(.5);
+        background: rgba( 0, 0, 0, .75 );
+        color: #ffffff;
+        z-index: 100;
+    }
+
+    .cws-ytp .cws-ytp-video-item:not(.playing):hover .cws-ytp-play-button:hover {
+         opacity: 1;
+    }
+
+    .cws-ytp .cws-ytp-video-item:not(.playing):hover .cws-ytp-play-button {
+        opacity: .85;
+        transform: scale(1);
+    }
+
+
+/* ---------------------------------------
+    Larger than mobile
+--------------------------------------- */
+
+    @media (min-width: 400px) {
+
+
+
+    }
+
+
+/* ---------------------------------------
+    Larger than phablet 
+--------------------------------------- */
+
+    @media (min-width: 550px) {
+
+        .cws-ytp #cws-ytp-header {
+            height: 150px; 
+            line-height: 150px;
+        }
+
+        .cws-ytp #cws-ytp-logo  {
+            float: left;
+        }
+
+        .cws-ytp #cws-ytp-video-container-wrapper{
+            padding: 16px 5% 16px 5%;
+        }
+
+        .cws-ytp .gridView .cws-ytp-video-item {
+            width: 49%;
+            margin: 0 0.5% 1%;
+        }
+
+    }
+
+
+/* ---------------------------------------
+    Larger than tablet
+--------------------------------------- */
+    @media (min-width: 750px) {
+        
+        .cws-ytp #cws-ytp-video-container-wrapper {
+            padding: 20px 5% 20px 5%;
+        }
+
+        .cws-ytp #cws-ytp-video-title h2{
+            font-size: 1.4rem ;
+            /* line-height: 3.4; */
+        }
+
+        .cws-ytp .gridView .cws-ytp-video-item {
+            width: 31%;
+            margin: 0 1% 3%;
+        }
+
+
+
+
+
+        .cws-ytp .cws-ytp-listview .cws-ytp-video-item {
+            display: block;  
+            margin: 0 1% 5%;
+            width: 96%;
+            vertical-align: top;
+            position: relative;
+            overflow: hidden;  
+        }
+
+        .cws-ytp .cws-ytp-listview .cws-ytp-video-image-link {
+            width: 30%;
+            height: auto;
+            display: block !important;
+            position: relative;
+            top: 0;
+            left: 0;
+            background-position: center;
+            background-size: 100%;
+            background-repeat: no-repeat;
+            padding: 0 0 17.3%;
+            z-index: 1000;        
+        }
+
+        .cws-ytp .cws-ytp-listview .cws-ytp-video-details {
+            width: 98%;
+            display: inline-block;
+            float: right;
+            vertical-align: top;    
+            padding: 0;
+            padding-left: 33%;
+            z-index: 999;
+            position: absolute;
+        }
+
+        .cws-ytp .cws-ytp-listview .cws-ytp-video-details h3 {
+            font-size: 20px;
+            line-height: 1.4em;
+            margin: 12px 0 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;    
+            margin-left: 0;
+            padding: 0;
+            letter-spacing: 3px;
+            text-transform: uppercase;    
+        }
+
+        .cws-ytp .cws-ytp-listview .cws-ytp-video-details .cws-ytp-video-meta {
+            text-align: left;
+            xfont-size: small;
+        }
+
+
+    .cws-ytp .cws-ytp-listview .cws-ytp-video-meta {
+        margin-bottom: 10px;
+    }
+
+    .cws-ytp .cws-ytp-listview /*.cws-ytp*/ .cws-ytp-video-desc {
+        display: block;
+        height:40px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+
+
+
+    }
+
+
+/* ---------------------------------------
+    Larger than desktop
+--------------------------------------- */
+
+    @media (min-width: 1000px) {}
+
+
+/* ---------------------------------------
+    Larger than Desktop HD
+--------------------------------------- */
+
+    @media (min-width: 1200px) {}
+
+
+
+    

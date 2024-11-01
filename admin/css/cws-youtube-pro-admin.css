@@ -1,0 +1,11 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+.help {
+	color: #4d4d4d;
+	font-style: italic;
+	font-weight: lighter;
+	letter-spacing: .33px;
+}
